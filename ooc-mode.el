@@ -72,9 +72,35 @@
 
 ;; no special indenting, just pure text mode
 (defun ooc-indent-line ()
-  "Indent current line as OOC code. Does nothing yet."
+  "Indent current line as OOC code."
   (interactive)
-  )
+  (beginning-of-line)
+  (if (bobp)
+      (indent-line-to 0)
+    (let ((not-indented t) cur-indent)
+      (if (looking-at "^[ \t]*}")
+          (progn
+            (save-excursion
+              (forward-line -1)
+              (setq cur-indent (- (current-indentation) default-tab-width)))
+            (if (< cur-indent 0)
+                (setq cur-indent 0)))
+        (save-excursion
+          (while not-indented
+            (forward-line -1)
+            (if (looking-at "^[ \t]*}")
+                (progn
+                  (setq cur-indent (current-indentation))
+                  (setq not-indented nil))
+              (if (looking-at ".*{")
+                  (progn
+                    (setq cur-indent (+ (current-indentation) default-tab-width))
+                    (setq not-indented nil))
+                (if (bobp)
+                    (setq not-indented nil)))))))
+      (if cur-indent
+          (indent-line-to cur-indent)
+        (indent-line-to 0)))))
 
 ;; no special syntax table
 (defvar ooc-mode-syntax-table nil
@@ -97,8 +123,8 @@
   (use-local-map ooc-mode-map)
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults '(ooc-font-lock-keywords 't))
-  ;; (make-local-variable 'indent-line-function)
-  ;; (setq indent-line-function 'ooc-indent-line)
+  (make-local-variable 'indent-line-function)
+  (setq indent-line-function 'ooc-indent-line)
   (setq major-mode 'ooc-mode)
   (setq mode-name "OOC")
   (setq imenu-generic-expression '((nil "^=head[1234] +\\(.*\\)" 1)))
