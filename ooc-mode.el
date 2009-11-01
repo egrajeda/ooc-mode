@@ -1,14 +1,15 @@
-;;; pod-mode.el --- Major mode for editing .pod-files
+;;; ooc-mode.el --- Major mode for editing .ooc files
 
-;;; It mainly defines a grammar for syntax highlighting.
-;;; POD is the Plain Old Documentation format of Perl.
+;;; Copyright 2009 Eduardo Grajeda Blandón
 
-;;; Copyright 2003-2009 Steffen Schwigon
+;;; Author: Eduardo Grajeda Blandón <tatofoo@gmail.com>
+;;; Version: 0.1
+;;; Keywords: ooc
 
-;;; Author: Steffen Schwigon <ss5@renormalist.net>
-;;; Version: 0.502
-;;; Keywords: perl pod
-;;; X-URL: http://search.cpan.org/~schwigon/pod-mode/
+;;; This mode is a fork of the great pod-mode, created by Steffen Schwigon. 
+;;; For more information you can go to:
+;;;
+;;;   http://github.com/renormalist/emacs-pod-mode
 
 ;;; This program is free software; you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -24,144 +25,81 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-;;; Tested on i386-linux with XEmacs 21.4.
-;;; Tested on i386-linux with GNU Emacs 21.2.1.
-;;; Tested on i386-windows-2k with XEmacs 21.4.
-
-;;; Commentary:
-
-;;; This mode is built with help of the
-;;; "Emacs language mode creation tutorial" at
-;;;
-;;;   http://two-wugs.net/emacs/mode-tutorial.html
-;;;
-;;; which disapeared from the net and is now hosted at
-;;;
-;;;   http://renormalist.net/cgi-bin/twiki/view/Renormalist/EmacsLanguageModeCreationTutorial
-;;;
-;;; Regexes are defined for the following font-lock-faces:
-;;;
-;;;   font-lock-keyword-face
-;;;   font-lock-type-face
-;;;   font-lock-comment-face
-;;;   font-lock-reference-face
-;;;   font-lock-doc-string-face
-;;;   font-lock-function-name-face
-;;;
-
-;;; Usage:
-
 ;;; Put this file into your load-path and the following into your ~/.emacs:
 ;;;
-;;;    (require 'pod-mode)
+;;;    (require 'ooc-mode)
 ;;;
 ;;;
-;;; To associate pod-mode with .pod files add the following to your ~/.emacs
+;;; To associate ooc-mode with .ooc files add the following to your ~/.emacs
 ;;;
 ;;;    (setq auto-mode-alist
 ;;;       (append auto-mode-alist
-;;;         '(("\\.pod$" . pod-mode))))
+;;;         '(("\\.ooc$" . ooc-mode))))
 ;;;
 ;;;
 ;;; To automatically turn on font-lock-mode add the following to your ~/.emacs
 ;;;
-;;;    (add-hook 'pod-mode-hook 'font-lock-mode)
-;;;
+;;;    (add-hook 'ooc-mode-hook 'font-lock-mode)
 
 ;;; Code:
 
 ;; default variables
-(defvar pod-mode-hook nil)
+(defvar ooc-mode-hook nil)
 
 ;; keymap
-(defvar pod-mode-map nil "Keymap for POD major mode.")
-(if pod-mode-map nil
+(defvar ooc-mode-map nil "Keymap for OOC major mode.")
+(if ooc-mode-map nil
   (let ((map (make-sparse-keymap)))
     ;; insert (define-key map ...) stuff here
-    (setq pod-mode-map map)))
+    (setq ooc-mode-map map)))
 
 ;; syntax highlighting: standard keywords
-(defconst pod-font-lock-keywords-1
+(defconst ooc-font-lock-keywords-1
   '(
-    ("^=\\(head[1234]\\|item\\|over\\|back\\|cut\\|pod\\|for\\|begin\\|end\\|encoding\\)" 0 font-lock-keyword-face)
+    ("\\<\\(class\\|func\\)\\>" 0 font-lock-keyword-face)
     ("^[ \t]+\\(.*\\)$" 1 font-lock-type-face)
     )
-  "Minimal highlighting expressions for POD mode.")
-
-;; syntax highlighting: additional keywords
-(defconst pod-font-lock-keywords-2
-  (append pod-font-lock-keywords-1
-	  '(
-	    ("^=\\(head[1234]\\|item\\|over\\|back\\|cut\\|pod\\|for\\|begin\\|end\\)\\(.*\\)" 2 font-lock-comment-face)
-	    ))
-  "Additional Keywords to highlight in POD mode.")
-
-;; syntax highlighting: even more keywords
-(defconst pod-font-lock-keywords-3
-  (append pod-font-lock-keywords-2
-	  '(
-	    ("[IBCFXZS]<\\([^>]*\\)>" 1 font-lock-reference-face)
-	    ("L<\\(\\([^|>]*\\)|\\)\\([^>]+\\)>"
-	     (2 font-lock-reference-face)
-	     (3 font-lock-function-name-face))
-	    ("L<\\([^|>]+\\)>" 1 font-lock-function-name-face)
-	    ("E<\\([^>]*\\)>" 1 font-lock-function-name-face)
-	    ("\"\\([^\"]+\\)\"" 0 font-lock-string-face)
-	    ))
-  "Balls-out highlighting in POD mode.")
+  "Minimal highlighting expressions for OOC mode.")
 
 ;; default level of highlight to maximum
-(defvar pod-font-lock-keywords pod-font-lock-keywords-3
-  "Default highlighting expressions for POD mode")
+(defvar ooc-font-lock-keywords ooc-font-lock-keywords-1
+  "Default highlighting expressions for OOC mode")
 
 ;; no special indenting, just pure text mode
-(defun pod-indent-line ()
-  "Indent current line as POD code. Does nothing yet."
+(defun ooc-indent-line ()
+  "Indent current line as OOC code. Does nothing yet."
   (interactive)
   )
 
 ;; no special syntax table
-(defvar pod-mode-syntax-table nil
-  "Syntax table for pod-mode.")
+(defvar ooc-mode-syntax-table nil
+  "Syntax table for ooc-mode.")
 
 ;; create and activate syntax table
-(defun pod-create-syntax-table ()
-  (if pod-mode-syntax-table
+(defun ooc-create-syntax-table ()
+  (if ooc-mode-syntax-table
       ()
-    (setq pod-mode-syntax-table (make-syntax-table))
-    (set-syntax-table pod-mode-syntax-table)
+    (setq ooc-mode-syntax-table (make-syntax-table))
+    (set-syntax-table ooc-mode-syntax-table)
     ))
 
-(defun pod-add-support-for-outline-minor-mode ()
-  "Provides additional menus from =head lines in outline-minor-mode"
-  (make-local-variable 'outline-regexp)
-  (setq outline-regexp "=head[1234] ")
-  (make-local-variable 'outline-level)
-  (setq outline-level
-        (function (lambda ()
-                    (save-excursion
-                      (string-to-int (buffer-substring (+ (point) 5) (+ (point) 6)))
-                      ))))
-  )
-
 ;; main
-(defun pod-mode ()
-  "Major mode for editing POD files (Plain Old Documentation for Perl)."
+(defun ooc-mode ()
+  "Major mode for editing OOC files (Plain Old Documentation for Perl)."
   (interactive)
   (kill-all-local-variables)
-  (pod-create-syntax-table)
-  (use-local-map pod-mode-map)
+  (ooc-create-syntax-table)
+  (use-local-map ooc-mode-map)
   (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults '(pod-font-lock-keywords 't))
+  (setq font-lock-defaults '(ooc-font-lock-keywords 't))
   ;; (make-local-variable 'indent-line-function)
-  ;; (setq indent-line-function 'pod-indent-line)
-  (setq major-mode 'pod-mode)
-  (setq mode-name "POD")
+  ;; (setq indent-line-function 'ooc-indent-line)
+  (setq major-mode 'ooc-mode)
+  (setq mode-name "OOC")
   (setq imenu-generic-expression '((nil "^=head[1234] +\\(.*\\)" 1)))
-  (run-hooks 'pod-mode-hook)
-  (pod-add-support-for-outline-minor-mode)
+  (run-hooks 'ooc-mode-hook)
   )
 
-(provide 'pod-mode)
+(provide 'ooc-mode)
 
-;;; pod-mode.el ends here
+;;; ooc-mode.el ends here
