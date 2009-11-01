@@ -56,13 +56,18 @@
 ;; syntax highlighting: standard keywords
 (defconst ooc-font-lock-keywords-1
   '(
-    ("\\<\\(class\\|func\\)\\>" 0 font-lock-keyword-face)
-    ("^[ \t]+\\(.*\\)$" 1 font-lock-type-face)
-    )
-  "Minimal highlighting expressions for OOC mode.")
+    ("\\<\\(class\\|func\\)\\>" 0 font-lock-keyword-face))
+  "Keywords highlighting expressions for OOC mode.")
+
+;; syntax highlighting: types
+(defconst ooc-font-lock-keywords-2
+  (append ooc-font-lock-keywords-1  
+          '(
+            ("\\<\\(Char\\|Int\\(?:16\\|32\\|64\\|8\\)?\\|L\\(?:L?ong\\)\\|S\\(?:hort\\|izeT\\)\\|U\\(?:Char\\|Int\\(?:16\\|32\\|64\\|8\\)?\\|L\\(?:L?ong\\)\\|Short\\)\\)\\>" 0 font-lock-type-face)))
+  "Types highlighting expressions for OOC mode.")
 
 ;; default level of highlight to maximum
-(defvar ooc-font-lock-keywords ooc-font-lock-keywords-1
+(defvar ooc-font-lock-keywords ooc-font-lock-keywords-2
   "Default highlighting expressions for OOC mode")
 
 ;; no special indenting, just pure text mode
@@ -85,7 +90,7 @@
 
 ;; main
 (defun ooc-mode ()
-  "Major mode for editing OOC files (Plain Old Documentation for Perl)."
+  "Major mode for editing OOC files."
   (interactive)
   (kill-all-local-variables)
   (ooc-create-syntax-table)
