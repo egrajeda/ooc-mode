@@ -50,7 +50,8 @@
 (defvar ooc-mode-map nil "Keymap for OOC major mode.")
 (if ooc-mode-map nil
   (let ((map (make-sparse-keymap)))
-    ;; insert (define-key map ...) stuff here
+    (define-key map "}" (lambda ()
+                          (interactive) (insert "}") (ooc-indent-line)))
     (setq ooc-mode-map map)))
 
 ;; syntax highlighting: standard keywords
