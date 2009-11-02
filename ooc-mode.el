@@ -56,15 +56,30 @@
 
 ;; syntax highlighting: standard keywords
 (defconst ooc-font-lock-keywords-1
-  '(
-    ("\\<\\(class\\|func\\)\\>" 0 font-lock-keyword-face))
+  (list
+   (cons (concat "\\<" 
+                 (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
+                               "super" "new" "const" "static" "include"
+                               "import" "break" "continue" "fallthrough"
+                               "implement" "override" "if" "else" "for" "while"
+                               "do" "switch" "case" "version" "return" "ctype"
+                               "typedef" "use") t)
+                 "\\>")
+         'font-lock-keyword-face))
   "Keywords highlighting expressions for OOC mode.")
 
 ;; syntax highlighting: types
 (defconst ooc-font-lock-keywords-2
-  (append ooc-font-lock-keywords-1  
-          '(
-            ("\\<\\(Char\\|Int\\(?:16\\|32\\|64\\|8\\)?\\|L\\(?:L?ong\\)\\|S\\(?:hort\\|izeT\\)\\|U\\(?:Char\\|Int\\(?:16\\|32\\|64\\|8\\)?\\|L\\(?:L?ong\\)\\|Short\\)\\)\\>" 0 font-lock-type-face)))
+  (append ooc-font-lock-keywords-1
+          (list
+           (cons (concat "\\<"
+                         (regexp-opt '("Int" "UInt" "Short" "UShort" "Long"
+                                       "ULong" "LLong" "ULLong" "Char" "UChar"
+                                       "Int8" "Int16" "Int32" "Int64" "UInt8"
+                                       "UInt16" "UInt32" "UInt64" "SizeT"
+                                       "String" "Float") t)
+                         "\\>")
+                 'font-lock-type-face)))
   "Types highlighting expressions for OOC mode.")
 
 ;; default level of highlight to maximum
