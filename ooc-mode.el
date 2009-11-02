@@ -89,7 +89,6 @@
     ;; save the position of the cursor from the start of the text
     (beginning-of-line-text)
     (setq pos-in-line (- cur-pos (point)))
-    (print pos-in-line)    
     ;; apply the indentation
     (beginning-of-line)
     (if (bobp)
