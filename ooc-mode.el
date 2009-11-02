@@ -57,7 +57,7 @@
 ;; syntax highlighting
 (defconst ooc-font-lock-keywords
   (list
-   (cons "\".*\"" 'font-lock-string-face)   
+   (cons "\"\\([^\"\\\\]\\|\\\\.\\)*\"" 'font-lock-string-face)
    (cons (concat "\\<" 
                  (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
                                "super" "new" "const" "static" "include"
