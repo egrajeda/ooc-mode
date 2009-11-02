@@ -54,9 +54,10 @@
                           (interactive) (insert "}") (ooc-indent-line)))
     (setq ooc-mode-map map)))
 
-;; syntax highlighting: standard keywords
-(defconst ooc-font-lock-keywords-1
+;; syntax highlighting
+(defconst ooc-font-lock-keywords
   (list
+   (cons "\".*\"" 'font-lock-string-face)   
    (cons (concat "\\<" 
                  (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
                                "super" "new" "const" "static" "include"
@@ -65,25 +66,19 @@
                                "do" "switch" "case" "version" "return" "ctype"
                                "typedef" "use") t)
                  "\\>")
-         'font-lock-keyword-face))
-  "Keywords highlighting expressions for OOC mode.")
+         'font-lock-keyword-face)
+   (cons (concat "\\<"
+                 (regexp-opt '("Int" "UInt" "Short" "UShort" "Long"
+                               "ULong" "LLong" "ULLong" "Char" "UChar"
+                               "Int8" "Int16" "Int32" "Int64" "UInt8"
+                               "UInt16" "UInt32" "UInt64" "SizeT"
+                               "String" "Float") t)
+                 "\\>")
+         'font-lock-type-face))
+  "Highlighting expressions for OOC mode.")
 
-;; syntax highlighting: types
-(defconst ooc-font-lock-keywords-2
-  (append ooc-font-lock-keywords-1
-          (list
-           (cons (concat "\\<"
-                         (regexp-opt '("Int" "UInt" "Short" "UShort" "Long"
-                                       "ULong" "LLong" "ULLong" "Char" "UChar"
-                                       "Int8" "Int16" "Int32" "Int64" "UInt8"
-                                       "UInt16" "UInt32" "UInt64" "SizeT"
-                                       "String" "Float") t)
-                         "\\>")
-                 'font-lock-type-face)))
-  "Types highlighting expressions for OOC mode.")
-
-;; default level of highlight to maximum
-(defvar ooc-font-lock-keywords ooc-font-lock-keywords-2
+;; set the syntax highlight
+(defvar ooc-font-lock-keywords ooc-font-lock-keywords
   "Default highlighting expressions for OOC mode")
 
 ;; some basic indenting rules
@@ -91,8 +86,12 @@
   "Indent current line as OOC code."
   (interactive)
   (let ((cur-pos (point)) pos-in-line)
-    (beginning-of-line)
+    ;; save the position of the cursor from the start of the text
+    (beginning-of-line-text)
     (setq pos-in-line (- cur-pos (point)))
+    (print pos-in-line)    
+    ;; apply the indentation
+    (beginning-of-line)
     (if (bobp)
         (indent-line-to 0)
       (let ((not-indented t) cur-indent)
@@ -119,6 +118,7 @@
         (if cur-indent
             (indent-line-to cur-indent)
           (indent-line-to 0))))
+    ;; restore the cursor position
     (forward-char pos-in-line)))
   
 ;; no special syntax table
