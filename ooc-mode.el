@@ -64,7 +64,7 @@
                                "import" "break" "continue" "fallthrough"
                                "implement" "override" "if" "else" "for" "while"
                                "do" "switch" "case" "version" "return" "ctype"
-                               "typedef" "use") t)
+                               "typedef" "use" "extends") t)
                  "\\>")
          'font-lock-keyword-face)
    (cons (concat "\\<"
